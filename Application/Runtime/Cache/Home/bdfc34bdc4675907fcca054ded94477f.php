@@ -11,12 +11,19 @@
     <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
 </head>
 <body>
+
 <ul class="layui-nav">
     <li class="layui-nav-item layui-this">
         <a href="<?php echo U('Index/index');?>">用户</a>
     </li>
     <li class="layui-nav-item"><a href="">IM聊天</a></li>
+    <?php if($Think.session.uid): ?><li class="layui-nav-item" style="float:right;"><a href="<?php echo U('Login/doLogout');?>" style="color: #A9B7B7;">登出</a></li>
+        <li class="layui-nav-item" style="float:right;"><a href="javascript:void(0);" style="color: #A9B7B7;"><?php echo (session('uname')); ?></a></li>
+        <?php else: ?>
+        <li class="layui-nav-item" style="float:right;"><a href="<?php echo U('Login/login');?>" style="color: #A9B7B7;">登录</a></li>
+        <li class="layui-nav-item" style="float:right;"><a href="<?php echo U('Login/register');?>" style="color: #A9B7B7;">注册</a></li><?php endif; ?>
 </ul>
+
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
     <legend>修改用户信息</legend>
 </fieldset>

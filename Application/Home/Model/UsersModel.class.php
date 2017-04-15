@@ -43,6 +43,18 @@ class UsersModel extends Model
         return $res;
     }
     /**
+     * 根据好友列表
+     * @param $page
+     * @param int $limit
+     * @param string $field
+     * @return mixed
+     */
+    public function getMyFriends($field = 'uid,uname,tel_num')
+    {
+        $res = $this->users->where(['is_delete'=>0])->field($field)->select();
+        return $res;
+    }
+    /**
      * 根据id获取用户信息
      * @param int $uid 用户id
      * @param string $field 查询字段

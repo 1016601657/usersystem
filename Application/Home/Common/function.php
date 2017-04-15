@@ -128,3 +128,6 @@ function checkUserLoginStatusByCookie()
     }
     return false;
 }
+function save_chat_log($data){
+    return M('chatlog')->data($data)->add();
+}

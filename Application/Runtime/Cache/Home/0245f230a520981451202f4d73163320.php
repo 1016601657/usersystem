@@ -7,428 +7,119 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="/Public/layui/css/layui.css"  media="all">
-
+    <link rel="stylesheet" href="/Public/css/custom.css">
     <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
 </head>
 <body>
 
-<blockquote class="layui-elem-quote">由于LayIM是我们目前唯一的付费组件，所以在你下载的layui包里，并不包含LayIM。如果你觉得Layui对你有所帮助，并且你希望Layui能够持续发展下去，那么我们很欢迎你能捐赠Layui，成为我们的VIP2+，这对我们的促进将会极大！</blockquote>
+<ul class="layui-nav">
+    <li class="layui-nav-item layui-this">
+        <a href="<?php echo U('Index/index');?>">用户</a>
+    </li>
+    <li class="layui-nav-item"><a href="">IM聊天</a></li>
+    <?php if($Think.session.uid): ?><li class="layui-nav-item" style="float:right;"><a href="<?php echo U('Login/doLogout');?>" style="color: #A9B7B7;">登出</a></li>
+        <li class="layui-nav-item" style="float:right;"><a href="javascript:void(0);" style="color: #A9B7B7;"><?php echo (session('uname')); ?></a></li>
+        <?php else: ?>
+        <li class="layui-nav-item" style="float:right;"><a href="<?php echo U('Login/login');?>" style="color: #A9B7B7;">登录</a></li>
+        <li class="layui-nav-item" style="float:right;"><a href="<?php echo U('Login/register');?>" style="color: #A9B7B7;">注册</a></li><?php endif; ?>
+</ul>
 
-<a class="layui-btn layui-btn-normal" href="http://layim.layui.com/" target="_blank">前去LayIM官网</a>
 
-<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
-    <legend>面板外的操作示例</legend>
-</fieldset>
 
-<div class="site-demo-button">
-    <button class="layui-btn site-demo-layim" data-type="chat">自定义会话</button>
-    <button class="layui-btn site-demo-layim" data-type="message">接受好友的消息</button>
-    <button class="layui-btn site-demo-layim" data-type="messageAudio">接受音频消息</button>
-    <button class="layui-btn site-demo-layim" data-type="messageVideo">接受视频消息</button>
-    <button class="layui-btn site-demo-layim" data-type="messageTemp">接受临时会话消息</button>
 
-    <br>
-
-    <button class="layui-btn site-demo-layim" data-type="add">申请好友</button>
-    <button class="layui-btn site-demo-layim" data-type="addqun">申请加群</button>
-    <button class="layui-btn site-demo-layim" data-type="addFriend">同意好友</button>
-    <button class="layui-btn site-demo-layim" data-type="addGroup">增加群组到主面板</button>
-    <button class="layui-btn site-demo-layim" data-type="removeFriend">删除主面板好友</button>
-    <button class="layui-btn site-demo-layim" data-type="removeGroup">删除主面板群组</button>
-
-    <br>
-    <button class="layui-btn site-demo-layim" data-type="setGray">置灰离线好友</button>
-    <button class="layui-btn site-demo-layim" data-type="unGray">取消好友置灰</button>
-    <a href="http://layim.layui.com/kefu.html" class="layui-btn site-demo-layim" target="_blank">客服模式</a>
-    <button class="layui-btn site-demo-layim" data-type="mobile">移动端版本</button>
-</div>
-
-<script src="//res.layui.com/layui/build/layui.js" charset="utf-8"></script>
+<script src="/Public/js/jquery.min.js" type="text/javascript"></script>
+<script src="/Public/layui/layui.js" charset="utf-8"></script>
+<script src="/Public/js/custom.js" charset="utf-8"></script>
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script>
-    layui.use('layim', function(){
-        var layim = layui.layim;
-
-        //演示自动回复
-        var autoReplay = [
-            '您好，我现在有事不在，一会再和您联系。',
-            '你没发错吧？face[微笑] ',
-            '洗澡中，请勿打扰，偷窥请购票，个体四十，团体八折，订票电话：一般人我不告诉他！face[哈哈] ',
-            '你好，我是主人的美女秘书，有什么事就跟我说吧，等他回来我会转告他的。face[心] face[心] face[心] ',
-            'face[威武] face[威武] face[威武] face[威武] ',
-            '<（@￣︶￣@）>',
-            '你要和我说话？你真的要和我说话？你确定自己想说吗？你一定非说不可吗？那你说吧，这是自动回复。',
-            'face[黑线]  你慢慢说，别急……',
-            '(*^__^*) face[嘻嘻] ，是贤心吗？'
-        ];
-
-        //基础配置
-        layim.config({
-            //初始化接口
-            init: {
-                url: '/layim/json/getList.json'
-                ,data: {}
-            }
-            //查看群员接口
-            ,members: {
-                url: '/layim/json/getMembers.json'
-                ,data: {}
-            }
-
-            ,uploadImage: {
-                url: '' //（返回的数据格式见下文）
-                ,type: '' //默认post
-            }
-            ,uploadFile: {
-                url: '' //（返回的数据格式见下文）
-                ,type: '' //默认post
-            }
-
-            ,isAudio: true //开启聊天工具栏音频
-            ,isVideo: true //开启聊天工具栏视频
-
-            //扩展工具栏
-            ,tool: [{
-                alias: 'code'
-                ,title: '代码'
-                ,icon: '&#xe64e;'
-            }]
-
-            //,brief: true //是否简约模式（若开启则不显示主面板）
-
-            //,title: 'WebIM' //自定义主面板最小化时的标题
-            //,right: '100px' //主面板相对浏览器右侧距离
-            //,minRight: '90px' //聊天面板最小化时相对浏览器右侧距离
-            ,initSkin: '3.jpg' //1-5 设置初始背景
-            //,skin: ['aaa.jpg'] //新增皮肤
-            //,isfriend: false //是否开启好友
-            //,isgroup: false //是否开启群组
-            //,min: true //是否始终最小化主面板，默认false
-            //,notice: true //是否开启桌面消息提醒，默认false
-            //,voice: false //声音提醒，默认开启，声音文件为：default.mp3
-
-            ,msgbox: '/layim/demo/msgbox.html' //消息盒子页面地址，若不开启，剔除该项即可
-            ,find: '/layim/demo/find.html' //发现页面地址，若不开启，剔除该项即可
-            ,chatLog: '/layim/demo/chatLog.html' //聊天记录页面地址，若不开启，剔除该项即可
-
-        });
-        //监听在线状态的切换事件
-        layim.on('online', function(status){
-            layer.msg(status);
-        });
-
-        //监听签名修改
-        layim.on('sign', function(value){
-            layer.msg(value);
-        });
-        //监听自定义工具栏点击，以添加代码为例
-        layim.on('tool(code)', function(insert){
-            layer.prompt({
-                title: '插入代码 - 工具栏扩展示例'
-                ,formType: 2
-                ,shade: 0
-            }, function(text, index){
-                layer.close(index);
-                insert('[pre class=layui-code]' + text + '[/pre]'); //将内容插入到编辑器
+    layui.use('form', function(){
+        var $ = layui.jquery, form = layui.form();
+        //全选
+        form.on('checkbox(allChoose)', function(data){
+            var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+            child.each(function(index, item){
+                item.checked = data.elem.checked;
             });
-        });
-
-        //监听layim建立就绪
-        layim.on('ready', function(res){
-            //console.log(res.mine);
-            layim.msgbox(5); //模拟消息盒子有新消息，实际使用时，一般是动态获得
-        });
-        //监听发送消息
-        layim.on('sendMessage', function(data){
-            var To = data.to;
-            //console.log(data);
-
-            if(To.type === 'friend'){
-                layim.setChatStatus('<span style="color:#FF5722;">对方正在输入。。。</span>');
-            }
-
-            //演示自动回复
-            setTimeout(function(){
-                var obj = {};
-                if(To.type === 'group'){
-                    obj = {
-                        username: '模拟群员'+(Math.random()*100|0)
-                        ,avatar: layui.cache.dir + 'images/face/'+ (Math.random()*72|0) + '.gif'
-                        ,id: To.id
-                        ,type: To.type
-                        ,content: autoReplay[Math.random()*9|0]
-                    }
-                } else {
-                    obj = {
-                        username: To.name
-                        ,avatar: To.avatar
-                        ,id: To.id
-                        ,type: To.type
-                        ,content: autoReplay[Math.random()*9|0]
-                    }
-                    layim.setChatStatus('<span style="color:#FF5722;">在线</span>');
-                }
-                layim.getMessage(obj);
-            }, 1000);
-        });
-        //监听查看群员
-        layim.on('members', function(data){
-            //console.log(data);
-        });
-
-        //监听聊天窗口的切换
-        layim.on('chatChange', function(res){
-            var type = res.data.type;
-            console.log(res.data.id)
-            if(type === 'friend'){
-                //模拟标注好友状态
-                //layim.setChatStatus('<span style="color:#FF5722;">在线</span>');
-            } else if(type === 'group'){
-                //模拟系统消息
-                layim.getMessage({
-                    system: true
-                    ,id: res.data.id
-                    ,type: "group"
-                    ,content: '模拟群员'+(Math.random()*100|0) + '加入群聊'
-                });
-            }
-        });
-
-
-        //面板外的操作
-        var $ = layui.jquery, active = {
-            chat: function(){
-                //自定义会话
-                layim.chat({
-                    name: '小闲'
-                    ,type: 'friend'
-                    ,avatar: '//tva3.sinaimg.cn/crop.0.0.180.180.180/7f5f6861jw1e8qgp5bmzyj2050050aa8.jpg'
-                    ,id: 1008612
-                });
-                layer.msg('也就是说，此人可以不在好友面板里');
-            }
-            ,message: function(){
-                //制造好友消息
-                layim.getMessage({
-                    username: "贤心"
-                    ,avatar: "//tp1.sinaimg.cn/1571889140/180/40030060651/1"
-                    ,id: "100001"
-                    ,type: "friend"
-                    ,content: "嗨，你好！欢迎体验LayIM。演示标记："+ new Date().getTime()
-                    ,timestamp: new Date().getTime()
-                });
-            }
-            ,messageAudio: function(){
-                //接受音频消息
-                layim.getMessage({
-                    username: "林心如"
-                    ,avatar: "//tp3.sinaimg.cn/1223762662/180/5741707953/0"
-                    ,id: "76543"
-                    ,type: "friend"
-                    ,content: "audio[http://gddx.sc.chinaz.com/Files/DownLoad/sound1/201510/6473.mp3]"
-                    ,timestamp: new Date().getTime()
-                });
-            }
-            ,messageVideo: function(){
-                //接受视频消息
-                layim.getMessage({
-                    username: "林心如"
-                    ,avatar: "//tp3.sinaimg.cn/1223762662/180/5741707953/0"
-                    ,id: "76543"
-                    ,type: "friend"
-                    ,content: "video[http://www.w3school.com.cn//i/movie.ogg]"
-                    ,timestamp: new Date().getTime()
-                });
-            }
-            ,messageTemp: function(){
-                //接受临时会话消息
-                layim.getMessage({
-                    username: "小酱"
-                    ,avatar: "//tva1.sinaimg.cn/crop.7.0.736.736.50/bd986d61jw8f5x8bqtp00j20ku0kgabx.jpg"
-                    ,id: "198909151014"
-                    ,type: "friend"
-                    ,content: "临时："+ new Date().getTime()
-                });
-            }
-            ,add: function(){
-                //实际使用时数据由动态获得
-                layim.add({
-                    type: 'friend'
-                    ,username: '麻花疼'
-                    ,avatar: '//tva1.sinaimg.cn/crop.0.0.720.720.180/005JKVuPjw8ers4osyzhaj30k00k075e.jpg'
-                    ,submit: function(group, remark, index){
-                        layer.msg('好友申请已发送，请等待对方确认', {
-                            icon: 1
-                            ,shade: 0.5
-                        }, function(){
-                            layer.close(index);
-                        });
-
-                        //通知对方
-                        /*
-                         $.post('/im-applyFriend/', {
-                         uid: info.uid
-                         ,from_group: group
-                         ,remark: remark
-                         }, function(res){
-                         if(res.status != 0){
-                         return layer.msg(res.msg);
-                         }
-                         layer.msg('好友申请已发送，请等待对方确认', {
-                         icon: 1
-                         ,shade: 0.5
-                         }, function(){
-                         layer.close(index);
-                         });
-                         });
-                         */
-                    }
-                });
-            }
-            ,addqun: function(){
-                layim.add({
-                    type: 'group'
-                    ,username: 'LayIM会员群'
-                    ,avatar: '//tva2.sinaimg.cn/crop.0.0.180.180.50/6ddfa27bjw1e8qgp5bmzyj2050050aa8.jpg'
-                    ,submit: function(group, remark, index){
-                        layer.msg('申请已发送，请等待管理员确认', {
-                            icon: 1
-                            ,shade: 0.5
-                        }, function(){
-                            layer.close(index);
-                        });
-
-                        //通知对方
-                        /*
-                         $.post('/im-applyGroup/', {
-                         uid: info.uid
-                         ,from_group: group
-                         ,remark: remark
-                         }, function(res){
-
-                         });
-                         */
-                    }
-                });
-            }
-            ,addFriend: function(){
-                var user = {
-                    type: 'friend'
-                    ,id: 1234560
-                    ,username: '李彦宏' //好友昵称，若申请加群，参数为：groupname
-                    ,avatar: '//tva4.sinaimg.cn/crop.0.0.996.996.180/8b2b4e23jw8f14vkwwrmjj20ro0rpjsq.jpg' //头像
-                    ,sign: '全球最大的中文搜索引擎'
-                }
-                layim.setFriendGroup({
-                    type: user.type
-                    ,username: user.username
-                    ,avatar: user.avatar
-                    ,group: layim.cache().friend //获取好友列表数据
-                    ,submit: function(group, index){
-                        //一般在此执行Ajax和WS，以通知对方已经同意申请
-                        //……
-
-                        //同意后，将好友追加到主面板
-                        layim.addList({
-                            type: user.type
-                            ,username: user.username
-                            ,avatar: user.avatar
-                            ,groupid: group //所在的分组id
-                            ,id: user.id //好友ID
-                            ,sign: user.sign //好友签名
-                        });
-
-                        layer.close(index);
-                    }
-                });
-            }
-            ,addGroup: function(){
-                layer.msg('已成功把[Angular开发]添加到群组里', {
-                    icon: 1
-                });
-                //增加一个群组
-                layim.addList({
-                    type: 'group'
-                    ,avatar: "//tva3.sinaimg.cn/crop.64.106.361.361.50/7181dbb3jw8evfbtem8edj20ci0dpq3a.jpg"
-                    ,groupname: 'Angular开发'
-                    ,id: "12333333"
-                    ,members: 0
-                });
-            }
-            ,removeFriend: function(){
-                layer.msg('已成功删除[凤姐]', {
-                    icon: 1
-                });
-                //删除一个好友
-                layim.removeList({
-                    id: 121286
-                    ,type: 'friend'
-                });
-            }
-            ,removeGroup: function(){
-                layer.msg('已成功删除[前端群]', {
-                    icon: 1
-                });
-                //删除一个群组
-                layim.removeList({
-                    id: 101
-                    ,type: 'group'
-                });
-            }
-            //置灰离线好友
-            ,setGray: function(){
-                layim.setFriendStatus(168168, 'offline');
-
-                layer.msg('已成功将好友[马小云]置灰', {
-                    icon: 1
-                });
-            }
-            //取消好友置灰
-            ,unGray: function(){
-                layim.setFriendStatus(168168, 'online');
-
-                layer.msg('成功取消好友[马小云]置灰状态', {
-                    icon: 1
-                });
-            }
-            //移动端版本
-            ,mobile: function(){
-                var device = layui.device();
-                var mobileHome = '/layim/demo/mobile.html';
-                if(device.android || device.ios){
-                    return location.href = mobileHome;
-                }
-                var index = layer.open({
-                    type: 2
-                    ,title: '移动版演示 （或手机扫右侧二维码预览）'
-                    ,content: mobileHome
-                    ,area: ['375px', '667px']
-                    ,shadeClose: true
-                    ,shade: 0.8
-                    ,end: function(){
-                        layer.close(index + 2);
-                    }
-                });
-                layer.photos({
-                    photos: {
-                        "data": [{
-                            "src": "http://cdn.layui.com/upload/2016_12/168_1481056358469_50288.png",
-                        }]
-                    }
-                    ,anim: 0
-                    ,shade: false
-                    ,success: function(layero){
-                        layero.css('margin-left', '350px');
-                    }
-                });
-            }
-        };
-        $('.site-demo-layim').on('click', function(){
-            var type = $(this).data('type');
-            active[type] ? active[type].call(this) : '';
+            form.render('checkbox');
         });
     });
 </script>
-
 </body>
 </html>
+<script type="text/javascript">
+    //localStorage.clear();
+    layui.use('layim', function(layim){
+        //基础配置
+        layim.config({
+
+            //获取主面板列表信息
+            init: {
+                url: "<?php echo U('Chat/getList');?>" //接口地址（返回的数据格式见下文）
+                ,type: 'get' //默认get，一般可不填
+                ,data: {} //额外参数
+            },
+            brief: false //是否简约模式（默认false，如果只用到在线客服，且不想显示主面板，可以设置 true）
+            ,title: '我的LayIM' //主面板最小化后显示的名称
+            ,maxLength: 3000 //最长发送的字符长度，默认3000
+            ,right: '0px' //默认0px，用于设定主面板右偏移量。该参数可避免遮盖你页面右下角已经的bar。
+            ,copyright: true //是否授权，如果通过官网捐赠获得LayIM，此处可填true
+        });
+
+        //建立WebSocket通讯
+        var socket = new WebSocket('ws://127.0.0.1:7272');
+
+        //连接成功时触发
+        socket.onopen = function(){
+            // 登录
+            var login_data = '{"type":"init","id":"{$uinfo.uid}","username":"<?php echo ($uinfo["uname"]); ?>"}';
+            socket.send(login_data);
+            console.log(login_data);
+            console.log("websocket握手成功!");
+        };
+
+        //监听收到的消息
+        socket.onmessage = function(res){
+            //console.log(res.data);
+            var data = eval("("+res.data+")");
+            switch(data['message_type']){
+                // 服务端ping客户端
+                case 'ping':
+                    socket.send('{"type":"ping"}');
+                    break;
+                // 登录 更新用户列表
+                case 'init':
+                    //console.log(data['id']+"登录成功");
+                    //layim.getMessage(res.data); //res.data即你发送消息传递的数据（阅读：监听发送的消息）
+                    break;
+
+                // 离线消息推送
+                case 'logMessage':
+                    setTimeout(function(){layim.getMessage(data.data)}, 1000);
+                    break;
+                // 用户退出 更新用户列表
+                case 'logout':
+                    break;
+                //聊天还有不在线
+                case 'ctUserOutline':
+                    console.log('11111');
+                    //layer.msg('好友不在线', {'time' : 1000});
+                    break;
+
+            }
+        };
+
+        //layim建立就绪
+        layim.on('ready', function(res){
+
+            layim.on('sendMessage', function(res){
+                //console.log(res);
+                // 发送消息
+                var mine = JSON.stringify(res.mine);
+                var to = JSON.stringify(res.to);
+                var login_data = '{"type":"chatMessage","data":{"mine":'+mine+', "to":'+to+'}}';
+                socket.send( login_data );
+            });
+        });
+
+    });
+</script>

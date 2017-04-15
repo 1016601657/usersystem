@@ -32,5 +32,9 @@ return array(
     'COOKIE_HTTPONLY' => '',     // Cookie的httponly属性 3.2.2新增
     'COOKIE_AUTH_KEY' => '3c86537c2ff3333cb4e0da556545f3bfkkd',//COOKIE加密key
     'SESSION_AUTO_START' => true,
+    //默认显示的用户分组
+    'user_group' => [
+        '0' => '测试组',
+    ]
 );
 ?>
