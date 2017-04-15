@@ -1,0 +1,16 @@
+.layui-table {
+    width: 60%;
+    margin: 10px 20px;
+    background-color: #fff;
+}
+.layui-input{
+    width: 20%;
+}
+.layui-laypage{
+    width:40% !important;
+    margin-left:37%;
+}
+.layui-tab{
+    margin: 10px 300px;
+}
+

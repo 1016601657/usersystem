@@ -1,0 +1,19 @@
+<script src="__PUBLIC__/js/jquery.min.js" type="text/javascript"></script>
+<script src="__PUBLIC__/layui/layui.js" charset="utf-8"></script>
+<script src="__PUBLIC__/js/custom.js" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    layui.use('form', function(){
+        var $ = layui.jquery, form = layui.form();
+        //全选
+        form.on('checkbox(allChoose)', function(data){
+            var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+            child.each(function(index, item){
+                item.checked = data.elem.checked;
+            });
+            form.render('checkbox');
+        });
+    });
+</script>
+</body>
+</html>

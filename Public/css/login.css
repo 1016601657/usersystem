@@ -1,0 +1,44 @@
+    /* 公用 */
+html {
+    background-color: #f1f1f1;
+}
+
+html, body {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+html body {
+    margin-top: 80px;
+}
+
+body {
+    line-height: 24px;
+}
+
+i {
+    font-style: normal;
+}
+
+.main {
+    width: 1075px;
+    min-height: 600px;
+    margin: 0 auto 15px;
+}
+
+.fly-panel {
+    margin-bottom: 10px;
+    background-color: #fff;
+    border-radius: 2px;
+}
+
+.fly-panel[pad20] {
+    padding: 20px;
+}
+
+.layui-input {
+    width: 100%;
+}
+.login-check{
+    width:300px !important;
+}
