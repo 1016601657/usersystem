@@ -7741,3 +7741,19 @@ SQL: SHOW COLUMNS FROM `users` [ RunTime:0.0008s ]
 SQL: SHOW COLUMNS FROM `users` [ RunTime:0.0026s ]
 ERR: 非法操作:undefined
 
+[ 2017-04-15T21:44:26+08:00 ] 127.0.0.1 /index.php/Home/chat/index.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000149s ]
+INFO: [ app_init ] --END-- [ RunTime:0.002706s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.001785s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002250s ]
+INFO: [ action_begin ] --START--
+INFO: Run Home\Behaviors\StatusDetectBehavior [ RunTime:0.002348s ]
+INFO: [ action_begin ] --END-- [ RunTime:0.002905s ]
+SQL: SHOW COLUMNS FROM `users` [ RunTime:0.0011s ]
+SQL: SHOW COLUMNS FROM `users` [ RunTime:0.0009s ]
+SQL: SELECT `uid`,`uname`,`tel_num`,`status` FROM `users` WHERE `is_delete` = 0 AND `uid` = 2 LIMIT 1   [ RunTime:0.0005s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+
