@@ -16,7 +16,7 @@
     <li class="layui-nav-item layui-this">
         <a href="{:U('Index/index')}">用户</a>
     </li>
-    <li class="layui-nav-item"><a href="">IM聊天</a></li>
+    <li class="layui-nav-item"><a href="{:U('Chat/index')}">IM聊天</a></li>
     <if condition="$Think.session.uid">
         <li class="layui-nav-item" style="float:right;"><a href="{:U('Login/doLogout')}" style="color: #A9B7B7;">登出</a></li>
         <li class="layui-nav-item" style="float:right;"><a href="javascript:void(0);" style="color: #A9B7B7;">{$Think.session.uname}</a></li>
