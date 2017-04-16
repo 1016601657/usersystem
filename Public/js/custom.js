@@ -27,19 +27,3 @@ function deleteUser(uid){
     }, function(){
     });
 }
-function doLogin(){
-    var loginUrl = $("#loginForm").attr('action');
-    var tel_num = $("#tel_num").val();
-    var passWord = $("#password").val();
-    var rememberPwd = false;
-    if ($("#rememberPwd").is(':checked')) {
-        rememberPwd = true;
-    }
-    $.post(loginUrl, {"tel_num": tel_num, "password": passWord, "rememberPwd": rememberPwd}, function (response) {
-        if (response.code == 200) {
-            window.location.href = "{:U('Index/index')}";
-        } else {
-            layer.msg(response.msg);
-        }
-    });
-}

@@ -2,21 +2,19 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>layui</title>
+    <title>用户管理系统</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="/Public/layui/css/layui.css"  media="all">
     <link rel="stylesheet" href="/Public/css/custom.css">
-    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
 </head>
 <body>
-
 <ul class="layui-nav">
-    <li class="layui-nav-item layui-this">
+    <li class="layui-nav-item">
         <a href="<?php echo U('Index/index');?>">用户</a>
     </li>
-    <li class="layui-nav-item"><a href="">IM聊天</a></li>
+    <li class="layui-nav-item"><a href="<?php echo U('Chat/index');?>">IM聊天</a></li>
     <?php if($Think.session.uid): ?><li class="layui-nav-item" style="float:right;"><a href="<?php echo U('Login/doLogout');?>" style="color: #A9B7B7;">登出</a></li>
         <li class="layui-nav-item" style="float:right;"><a href="javascript:void(0);" style="color: #A9B7B7;"><?php echo (session('uname')); ?></a></li>
         <?php else: ?>
@@ -58,7 +56,6 @@
 <script src="/Public/js/jquery.min.js" type="text/javascript"></script>
 <script src="/Public/layui/layui.js" charset="utf-8"></script>
 <script src="/Public/js/custom.js" charset="utf-8"></script>
-<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script>
     layui.use('form', function(){
         var $ = layui.jquery, form = layui.form();
@@ -70,6 +67,15 @@
             });
             form.render('checkbox');
         });
+    });
+    $(function () {
+        var url = window.location;
+        if(url == 'http://local.mytest.com/'){
+            url = 'http://local.mytest.com/index.php/Home/Index/index.html';
+        }
+        $('.layui-nav a').filter(function () {
+            return (this.href == url);
+        }).parent('li').addClass('layui-this');
     });
 </script>
 </body>

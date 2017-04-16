@@ -2,13 +2,12 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>layui</title>
+    <title>用户管理系统</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="/Public/layui/css/layui.css"  media="all">
     <link rel="stylesheet" href="/Public/css/custom.css">
-    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
 </head>
 <body>
 
@@ -55,30 +54,41 @@
         </div>
     </div>
 </div>
-</body>
 <script src="/Public/js/jquery.min.js" type="text/javascript"></script>
 <script src="/Public/layui/layui.js" charset="utf-8"></script>
 <script src="/Public/js/custom.js" charset="utf-8"></script>
-<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script>
-    layui.use('form', function () {
+    layui.use('form', function(){
         var $ = layui.jquery, form = layui.form();
         //全选
-        form.on('checkbox(allChoose)', function (data) {
+        form.on('checkbox(allChoose)', function(data){
             var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
-            child.each(function (index, item) {
+            child.each(function(index, item){
                 item.checked = data.elem.checked;
             });
             form.render('checkbox');
         });
     });
+    $(function () {
+        var url = window.location;
+        if(url == 'http://local.mytest.com/'){
+            url = 'http://local.mytest.com/index.php/Home/Index/index.html';
+        }
+        $('.layui-nav a').filter(function () {
+            return (this.href == url);
+        }).parent('li').addClass('layui-this');
+    });
+</script>
+</body>
+</html>
+<script>
     function doRegister(){
         var loginUrl = $("#registerForm").attr('action');
         var uname = $("#uname").val();
         var tel_num = $("#tel_num").val();
         var passWord = $("#password").val();
         var repassword = $("#repassword").val();
-        
+
         $.post(loginUrl, {"uname": uname, "tel_num": tel_num, "password": passWord, "repassword": repassword}, function (response) {
             if (response.code == 200) {
                 window.location.href = "<?php echo U('Index/index');?>";
@@ -88,5 +98,3 @@
         });
     }
 </script>
-</body>
-</html>

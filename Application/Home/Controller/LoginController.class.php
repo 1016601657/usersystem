@@ -10,6 +10,7 @@ namespace Home\Controller;
 
 use Think\Controller;
 use Home\Model\UsersModel;
+use Home\Model\ChatgroupModel;
 
 class LoginController extends Controller
 {
@@ -19,9 +20,14 @@ class LoginController extends Controller
     public function _initialize()
     {
         $this->user = new UsersModel();
+        $this->chat = new ChatgroupModel();
     }
 
+    /**
+     * 进入登陆界面
+     */
     public function login(){
+        // 检查用户是否处于记住密码中
         $checkRes = $this->checkUserLoginStatus();
         if ($checkRes) {
             $this->redirect('Index/index');
@@ -29,13 +35,16 @@ class LoginController extends Controller
             $this->display();
         }
     }
+
+    /**
+     * 执行登陆操作
+     */
     public function doLogin(){
         if (IS_AJAX && IS_POST) {
-            $mobile = I('post.tel_num', '', 'trim');
-            $userpass = I('post.password', '', 'trim');
-            $isRememberPwd = I('post.rememberPwd');
+            $mobile = I('post.tel_num', '', 'trim');//手机号
+            $userpass = I('post.password', '', 'trim');//密码
+            $isRememberPwd = I('post.rememberPwd');//是否记住密码
             $this->rememberPwd = $isRememberPwd === 'true' ? true : false;
-
             $response = [];
 
             //判断手机
@@ -58,6 +67,7 @@ class LoginController extends Controller
             if ($checkResult === true) {
                 $response['code'] = 200;
                 $response['msg'] = '登录成功';
+                // 记住密码登陆成功后设置cookie
                 $this->loginCookie();
                 $this->ajaxReturn($response);
             } else {
@@ -71,12 +81,16 @@ class LoginController extends Controller
             $this->ajaxReturn($response);
         }
     }
+
+    /**
+     * 执行注册
+     */
     public function doRegister(){
         if (IS_AJAX && IS_POST) {
-            $uname = I('post.uname', '', 'trim');
-            $tel_num = I('post.tel_num', '', 'trim');
-            $userpass = I('post.password', '', 'trim');
-            $reuserpass = I('post.repassword', '', 'trim');
+            $uname = I('post.uname', '', 'trim');//用户姓名
+            $tel_num = I('post.tel_num', '', 'trim');//手机号
+            $userpass = I('post.password', '', 'trim');//密码
+            $reuserpass = I('post.repassword', '', 'trim');//重复密码
 
             $response = [];
             //判断手机
@@ -117,9 +131,15 @@ class LoginController extends Controller
             if($registerResult){
                 $response['code'] = 200;
                 $response['msg'] = '注册成功';
+                //注册成功后将信息存入session
                 session('uid', $registerResult);
                 session('uname', $uname);
                 session('tel_num', $tel_num);
+                //为注册用户加入一个测试分组
+                $groupUser['userid'] = $registerResult;
+                $groupUser['username'] = $uname;
+                $groupUser['groupid'] = 1;
+                $this->chat->setDefaultGroup($groupUser);
                 $this->ajaxReturn($response);
             }else{
                 $response['code'] = 404;
@@ -132,15 +152,25 @@ class LoginController extends Controller
             $this->ajaxReturn($response);
         }
     }
+
+    /**
+     * 注册页面
+     */
     public function register(){
         $this->display();
     }
+
+    /**
+     * 退出操作
+     */
     public function doLogout(){
+        //清空session及cookie
         session('uid', null);
         session('uname', null);
         session('tel_num', null);
         session_destroy();
         cookie(null);
+        //退出后跳转至登陆页面
         $this->redirect("Login/login");
     }
 

@@ -1,7 +1,6 @@
 <script src="__PUBLIC__/js/jquery.min.js" type="text/javascript"></script>
 <script src="__PUBLIC__/layui/layui.js" charset="utf-8"></script>
 <script src="__PUBLIC__/js/custom.js" charset="utf-8"></script>
-<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script>
     layui.use('form', function(){
         var $ = layui.jquery, form = layui.form();
@@ -13,6 +12,15 @@
             });
             form.render('checkbox');
         });
+    });
+    $(function () {
+        var url = window.location;
+        if(url == 'http://local.mytest.com/'){
+            url = 'http://local.mytest.com/index.php/Home/Index/index.html';
+        }
+        $('.layui-nav a').filter(function () {
+            return (this.href == url);
+        }).parent('li').addClass('layui-this');
     });
 </script>
 </body>
